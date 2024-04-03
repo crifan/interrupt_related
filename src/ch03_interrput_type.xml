@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="interrput_type">
+<title>中断的分类</title>
+<abstract></abstract>
+
+<para>中断，从不同的角度来区分的话，可以有不同的分类。</para>
+<para>下面就来从不同的方面，不同的角度，不同的侧重点，来对常见的分类，做个详细的解释。</para>
+
+<sect1 xml:id="internal_external_interrupt"><title>内部中断和外部中断</title>
+    <para>根据中断来源的方向不同，可分为内部中断和外部中断。</para>
+    <para>首先我们要搞懂，此处所说的内部中断和外部中断中的“内部”和“外部”，都是相对于CPU，或者说相对于CPU所执行的指令，来说的。</para>
+    <para>另外，广义上说，中断，就是中止，打断，即中止打断正在执行指令的CPU（而让其去执行别的ISR程序）的，都可以叫做中断。</para>
+    <para>所以，不论是狭义上的普通所说的中断，还是陷阱和异常，对于CPU执行正常的指令这个过程来说，都是会打断正常执行指令的顺序，所以都可以叫做中断。</para>
+    <para>所以，就很好理解这里的外部和内部的含义了：</para>
+    <para>针对于CPU执行指令来说，从外界过来干扰自己的，那种普通外设所产生的硬件的中断，就是外部中断；</para>
+    <para>而CPU本身执行的指令产生错误了或者本身就是执行的是INT等中断指令，那么就会产生异常或陷阱，就属于内部中断。</para>
+    <para><emphasis>即对于广义上的中断的概念来说：</emphasis></para>
+    <para><emphasis>普通的硬件中断，属于外部中断；</emphasis></para>
+    <para><emphasis>陷阱和异常，属于内部中断。</emphasis></para>
+</sect1>
+
+<sect1 xml:id="software_hardware_interrupt"><title>软件中断和硬件中断</title>
+    <para>根据中断的来源的性质不同，中断可分为软件中断和硬件中断。</para>
+    <para>根据前面对于中断，异常和陷阱的详细解释，所以此处也很好理解所谓的软件中断和硬件中断了。</para>
+    <para>即，从中断的来源来说，来自外部的外设所产生的中断，叫做硬件中断；</para>
+    <para>而从CPU内部所执行的（类似于80x86中的INT）指令所产生的中断，成为软件中断，是软件写的中断指令，即软件代码，所产生的中断，此处就是指陷阱。</para>
+    <para>所以，可以简单的理解为：</para>
+    <para><emphasis>软件中断就是陷阱；</emphasis></para>
+    <para><emphasis>硬件中断就是普通的外设的中断；</emphasis></para>
+</sect1>
+
+<sect1 xml:id="vectored_nonverctored_interrupt"><title>向量中断和非向量中断</title>
+    <para>中断根据如何系统如何处理和响应的方式，可以分为向量中断和非向量中断。</para>
+    <para>向量者，矢量也，即指方向，门路。</para>
+    <para>简单的说就是：</para>
+    <para><emphasis>向量中断由硬件提供中断服务程序入口地址；</emphasis></para>
+    <para><emphasis>非向量中断由软件提供中断服务程序入口地址；</emphasis></para>
+    <para></para>
+    <para>向量中断，是CPU得到此中断后，直接跳转到，对应的，固定的某个地址，该地址原先已经存放好了该中断所对应的中断服务程序ISR的地址了，即某个ISR函数的地址，所以CPU直接跳转到该位置，也就是直接跳转到对应的ISR，执行对应程序了。</para>
+    <para>对于非向量中断，是对应着多个函数，共享这个非向量中断的总入口地址，即可以理解为，多个非向量中断，其入口地址都是同一个地址，即普通的IRQ中断的那个地址，然后此地址中存放了通用的ISR函数的地址，该ISR函数中，会去经过一系列的判断，找出是具体真正的哪个外设的中断，然后再在对应的之前设置好的某个中断服务程序表中，找到对应的该中断所对应中断函数，去执行对应的真正的ISR函数。</para>
+    
+    <sect2 xml:id="example_for_vector_int"><title>向量中断和非向量中断实例解析</title>
+        <para>以ARM系统为例，物理地址最开始的几个地址，存放的是对应的几个最常见的向量中断，如数据中止异常，软中断，预取指错误异常等，还有一个是其他非向量中断的总入口IRQ。</para>
+        <para>此部分内容，可以参考Uboot中的ARM的初始化部分start.S中的代码来解释：</para>
+        <para>其相关代码如下：</para>
+        <programlisting language="c">
+_start:	b       reset
+	ldr	pc, _undefined_instruction
+	ldr	pc, _software_interrupt
+	ldr	pc, _prefetch_abort
+	ldr	pc, _data_abort
+	ldr	pc, _not_used
+	ldr	pc, _irq
+	ldr	pc, _fiq
+
+_undefined_instruction:	.word undefined_instruction
+_software_interrupt:	.word software_interrupt
+_prefetch_abort:	.word prefetch_abort
+_data_abort:		.word data_abort
+_not_used:		.word not_used
+_irq:			.word irq
+_fiq:			.word fiq
+。。。
+/*
+ * exception handlers
+ */
+	.align  5
+undefined_instruction:
+	get_bad_stack
+	bad_save_user_regs
+	bl 	do_undefined_instruction
+
+	.align	5
+software_interrupt:
+	get_bad_stack
+	bad_save_user_regs
+	bl 	do_software_interrupt
+
+	.align	5
+prefetch_abort:
+	get_bad_stack
+	bad_save_user_regs
+	bl 	do_prefetch_abort
+
+	.align	5
+data_abort:
+	get_bad_stack
+	bad_save_user_regs
+	bl 	do_data_abort
+
+	.align	5
+not_used:
+	get_bad_stack
+	bad_save_user_regs
+	bl 	do_not_used
+。。。
+
+	.align	5
+irq:
+	sub	lr, lr, #4			        @ the return address
+	ldr	sp, IRQ_STACK_START	        @ the stack for irq
+	stmdb	sp!, 	{ r0-r12,lr }	@ save registers
+	
+	ldr	lr,	=int_return		        @ set the return addr
+	ldr	pc, =IRQ_Handle		        @ call the isr
+int_return:
+	ldmia	sp!, 	{ r0-r12,pc }^	@ return from interrupt
+
+	.align	5
+fiq:
+	get_fiq_stack
+	/* someone ought to write a more effiction fiq_save_user_regs */
+	irq_save_user_regs
+	bl 	do_fiq
+	irq_restore_user_regs
+        </programlisting>
+        <para>可看出，物理内存最开始的存放的内容是：</para>
+        <para>地址0x0: reset整个系统</para>
+        <para>地址0x04:放了一个指令，该指令是将_undefined_instruction存入PC，即实现PC跳转到_undefined_instruction的地址中去；</para>
+        <para>地址0x08:同理，PC跳转到_software_interrupt</para>
+        <para>地址0x0C:同理，PC跳转到_prefetch_abort</para>
+        <para>地址0x10:同理，PC跳转到_data_abort</para>
+        <para>地址0x14:同理，PC跳转到_not_used</para>
+        <para>地址0x18:同理，PC跳转到_irq</para>
+        <para>地址0x1C:同理，PC跳转到_fiq</para>
+        <para>其中，对于_undefined_instruction，很明显，就是我们之前所解释的异常，即指令执行出了对应的问题了，PC会直接跳转到此处的0x04的地址，然后该地址中，就是把PC跳转到对应的_undefined_instructio的位置，去执行对应的异常处理。</para>
+        <para>其他的_software_interrupt和_data_abort等，都是同样道理，不多解释。</para>
+        <para>而上述这些异常或_software_interrupt，就都是所谓的中断向量，都是由硬件架构决定的，固定好的了地址，作为软件开发人员，只要把对应的指令写好，到时候发生对应的异常，系统自动会跳转到此处的地址，实现对应的PC的跳转，去做对应的处理。</para>
+        <para>而对于0x18处的_irq，就是我们所说的所有的非向量中断的总的入口地址，即系统发现有中断了，此处发现是普通的中断，那么就会跳转到0x18的地址这里，然后执行的是：</para>
+        <para>PC跳转到_irq，而_irq地址所对应的内容是：保存对应的当前的环境，即上下文，然后执行“ldr	pc, =IRQ_Handle”，即跳转到IRQ_Handle函数中去。</para>
+        <para>而以TQ2440的S3C2410为例，其代码为：</para>
+        <para><filename>interrupts.c (opt\embedsky\u-boot-1.1.6\cpu\arm920t\s3c24x0)</filename></para>
+        <programlisting language="c">
+<![CDATA[
+void Isr_Init(void)
+{
+    int i = 0;
+    intregs = S3C24X0_GetBase_INTERRUPT();
+
+    for (i = 0; i < sizeof(isr_handle_array) / sizeof(isr_handle_array[0]); i++ )
+    {
+        isr_handle_array[i] = Dummy_isr;
+    }
+
+    intregs->INTMOD=0x0;                // All=IRQ mode
+    intregs->INTMSK=BIT_ALLMSK;         // All interrupt is masked.
+
+    //pISR_URXD0=(unsigned)Uart0_RxInt;
+    //rINTMSK=~(BIT_URXD0);             //enable UART0 RX Default value=0xffffffff
+
+    isr_handle_array[ISR_TIMER4_OFT] = IsrTimer4;
+    isr_handle_array[ISR_WDT_OFT]  = IsrWatchdog;
+
+#ifdef CONFIG_USB_DEVICE
+    isr_handle_array[ISR_USBD_OFT] = IsrUsbd;
+    isr_handle_array[ISR_DMA2_OFT] = IsrDma2;
+    ClearPending(BIT_DMA2);
+    ClearPending(BIT_USBD);
+#endif
+}
+
+void IRQ_Handle(void)
+{
+    unsigned long oft = intregs->INTOFFSET;
+    S3C24X0_GPIO * const gpio = S3C24X0_GetBase_GPIO();
+
+//  printk("IRQ_Handle: %d\n", oft);
+
+    if( oft == 4 ) gpio->EINTPEND = 1<<7;       
+    intregs->SRCPND = 1<<oft;
+    intregs->INTPND = intregs->INTPND;
+
+    /* run the isr */
+    isr_handle_array[oft]();
+}
+]]>
+        </programlisting>
+        <para>可见，其中IRQ_Handle做的事情，就是去读取对应的寄存器，然后经过计算，找到真正的中断源的偏移量，然后再通过偏移量，在中断函数表中，去获得对应该中断的中断服务程序ISR。</para>
+        <para>而其中的中断函数表isr_handle_array是在程序最开始初始化时候去调用Isr_Init来初始化好的，已经见每个中断多对应的ISR函数存放了对应的位置了。</para>
+        <para>向量中断的优点是，反应速度快，有了中断，CPU直接跳转到对应的位置，去执行对应的代码了，属于速度快，但是无法扩展，由硬件设计时候觉得的，固定好了，没法改变。</para>
+        <para>而非向量中断，由于多了一层调用关系，而且在总的普通中断的入口函数中，要去读取寄存器，再去计算到底是哪个中断，所以，速度上，就相对较慢了，属于速度慢，但是扩展性较好。</para>
+        <para>简单的说就是：</para>
+        <para><emphasis>硬件中断，由硬件提供ISR地址，速度较快；</emphasis></para>
+        <para><emphasis>软件中断，由软件计算出中断源，再去找出对应的ISR，速度相对慢。</emphasis></para>
+    </sect2>
+</sect1>
+
+<sect1 xml:id="maskable_interrput_and_nmi"><title>可屏蔽中断和非可屏蔽（NMI）中断</title>
+    <para>而普通的中断，即前面所说的外部的硬件的中断，根据其中断的性质，是否可以被屏蔽掉，而分为可屏蔽中断和非可屏蔽中断。</para>
+    <para>对于如果是可屏蔽的中断，是通过设置硬件上对应的标志位flag来实现屏蔽对应的中断的。</para>
+    <para>一般的中断服务程序中，很多时候，你都会看到，在进入ISR的时候，首先做的事情就是去关闭中断，此时，指的就是设置对应的中断屏蔽寄存器的标志位，去关闭后续的可能发生的中断。</para>
+    <para>常见的系统中，都有对应的mask 寄存器的，针对每一个中断，设置其是否被屏蔽。</para>
+    <para><emphasis>一般来说，向量中断，都是不可屏蔽的，而非向量中断，多数都是可以屏蔽的。</emphasis></para>
+</sect1>
+
+</chapter>

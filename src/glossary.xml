@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<glossary
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="glossary">
+<title>缩略词</title>
+
+<glossentry id="NMI"><glossterm>NMI</glossterm>
+    <acronym>NMI</acronym>
+    <glossdef>
+      <para>Non-Maskable Interrupt</para>
+      <para>非可屏蔽中断</para>
+    </glossdef>
+</glossentry>
+
+</glossary>

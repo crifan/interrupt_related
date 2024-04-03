@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE preface>
+
+<preface
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="preface">
+<title>正文之前</title>
+
+<section><title>此文目的</title>
+    <para>解释中断的基本概念，和其与异常和陷阱之间的区别和联系。</para>
+    <para>然后再详细解释，从不同方面来看，中断所细分出来的各种分类。</para>
+</section>
+
+<section><title>声明</title>
+    <para>由于笔者水平有限，文中难免有误，欢迎批评指正:admin (at) crifan.com。</para>
+    <para>版权所有，欢迎转载。</para>
+</section>
+
+</preface>

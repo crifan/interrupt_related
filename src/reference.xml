@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<bibliography
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="reference">
+
+<bibliomixed id="ref.int_trap_except_ch17">
+  <bibliosource><ulink url="http://webster.cs.ucr.edu/AoA/DOS/pdf/ch17.pdf">Interrupts, Traps, and Exceptions Chapter 17</ulink></bibliosource>
+  <author>from network</author>
+</bibliomixed>
+
+<bibliomixed id="ref.simple_intro_int_trap_excpt">
+  <bibliosource><ulink url="http://blog.csdn.net/littlehedgehog/article/details/2740406">浅评中断、陷阱、异常 (转)</ulink></bibliosource>
+  <author>littlehedgehog</author>
+</bibliomixed>
+
+<bibliomixed id="ref.about_verctored_int">
+  <bibliosource><ulink url="http://hi.baidu.com/houxn22/blog/item/9bd4df1f55a8c21f304e15dc.html">【转】关于向量中断和非向量中断</ulink></bibliosource>
+  <author>houxn22</author>
+</bibliomixed>
+
+<bibliomixed id="ref.vectored_int_vs_non_verctored_int">
+  <bibliosource><ulink url="http://www.laogu.com/laogubbs/see_93533.htm">向量中断和非向量中断的区别</ulink></bibliosource>
+  <author>yangze</author>
+</bibliomixed>
+
+<bibliomixed id="ref.arm9_2410_int_theory">
+  <bibliosource><ulink url="http://www.crifan.com/switch_arm9_2410_transplant_arm_interrupt_principle_the_error_interrupt_nesting_how_come_the_interrupt_number/">【转】ARM9 2410移植之ARM中断原理, 中断嵌套的误区，中断号的怎么来的</ulink></bibliosource>
+  <author>徐亮</author>
+</bibliomixed>
+
+<bibliomixed id="ref.wiki_trap">
+  <bibliosource><ulink url="http://en.wikipedia.org/wiki/Trap_(computing)">Trap (computing)</ulink></bibliosource>
+  <author>wiki</author>
+</bibliomixed>
+
+<bibliomixed id="ref.diff_soft_hard_int_expt_trap">
+  <bibliosource><ulink url="http://kerneltrap.org/node/6314">Difference b/w software interrupt/exception/trap</ulink></bibliosource>
+  <author>kerneltrap</author>
+</bibliomixed>
+
+<bibliomixed id="ref.trap_vs_interrupt">
+  <bibliosource><ulink url="http://wiki.answers.com/Q/What_is_key_difference_between_a_trap_and_interrupt">What is key difference between a trap and interrupt?</ulink></bibliosource>
+  <author>wiki answer</author>
+</bibliomixed>
+
+<bibliomixed id="ref.exception_and_nmi">
+  <bibliosource><ulink url="http://oss.org.cn/kernel-book/ch03/3.1.3.htm">异常及非屏蔽中断</ulink></bibliosource>
+  <author>oss org</author>
+</bibliomixed>
+
+</bibliography>

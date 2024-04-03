@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="interrupt_trap_exception">
+<title>中断和异常，陷阱的区别和联系</title>
+<abstract></abstract>
+
+<para>说到中断，那么多很多人会想到其他几个相关的词，即异常和陷阱。</para>
+<para>这几个概念，很多人都会搞混淆，所以，在此特别地，详细地解释一下。</para>
+<para>首先，各自名字所对应的英文单词叫法分别是，中断是interrupt，异常是exception，陷阱是trap。</para>
+<para>对于中断，异常和陷阱这几个词来说，其实还有其他一些相关的词：故障/错误fault，终止abort。对于这些名词，其实没有一个完全统一和精确的解释。</para>
+<para>因此也出现，不同的厂家，不同的作者，有不同的各自的解释。</para>
+<para>不过，相对来说，这么多名词中，最常用的，还是上面这三个：中断，异常和陷阱。</para>
+<para>此处，对于其各自的含义，也采用大家所最常用的解释。</para>
+<para>只是，如果你在别处看到对这些名词有不同的解释，也别太惊讶就行了。</para>
+
+<sect1 xml:id="interrput_intro"><title>中断Interrupt</title>
+    <para>此处的中断，一般也成为硬件中断，即外部的硬件发生了某些事件了，然后就通知到了当前CPU，CPU跳转到对应的ISR去执行了。</para>
+    <para>此处的外部的硬件中断，和当前执行的指令，是没有任何关系的。</para>
+    <para>而且往往都是外部设备，需要引起CPU的注意，比如某个按键被按下了，定时器超时了等等，才会去打断CPU，CPU才会跳转到ISR执行，然后执行完对应的ISR，再回来继续执行下一条指令。</para>
+    <para>可见，CPU此处是被动的，也不知道什么时候，属于不可预知的，就会受到外部的硬件中断，而外部的硬件中断，和当前CPU所执行的指令，没有任何关系，即属于异步关系。</para>
+</sect1>
+
+<sect1 xml:id="exception_intro"><title>异常Exception</title>
+    <para>异常，可以称为自动产生的陷阱，不是我们所期望产生的，而是被动的强制产生的。</para>
+    <para>我们执行的指令遇到了一些异常情况，比如（除法中出现了）除零，（指令执行时候遇到了）非法指令，内存非法访问（比如向只读的内存中写入数据）等，就会触发异常，CPU发现你程序在做非法的事情了，发现你在干坏事，那么当前要出来处理这些紧急事务了，即跳转到对应的异常处理程序中去，接下来要做的事情，可以有多种做法和选择，比如尝试修正此错误，或者简单地中止程序的运行，或者是打印出相关的错误信息（比如Windows遇到非法地址访问，会跳出对应的对话框提示你，某某地址，常见的是0地址，不能访问）。</para>
+    <para>可见，异常，对于CPU来说，也是被动的，不知道何时会发生的，但是和当前指令是有关系的，即当前执行指令出现错误的时候，才会出现异常，即是同步的。</para>
+</sect1>
+
+<sect1 xml:id="trap_intro"><title>陷阱Trap</title>
+    <para>陷阱，也常被叫做软件中断（software interrupt）。80x86系统中，有对应的INT指令，执行对应的INT指令，就会跳转到对应的函数中去执行对应的ISR了。</para>
+    <para>此处的陷阱，可以看出，是无条件执行的，而且是有意为之，是软件写的代码，故意的，让其产生对应的陷阱的。即只要执行了INT指令后，就会跳转到对应的ISR中去，而不像中断和异常那样需要满足相关的条件。</para>
+    <para>陷阱主要是用于调试的，比如用来通知调试器，某条执行被执行了，然后触发调试器做出对应的动作。</para>
+    <para>对于CPU来说，陷阱是由于执行了INT等指令而产生的，所以是（和当前指令的执行是）同步的（synchronous），对于CPU也是预知的，知道是什么时候会发生陷阱的，属于主动的，而不是被动的。</para>
+</sect1>
+
+<sect1 xml:id="interrupt_exception_trap_relation"><title>中断和异常，陷阱的区别和联系</title>
+    <para>对于中断，异常和陷阱的各种关系，总结如下：</para>
+    <table xml:id="tbl.int_expt_trap_relation"><title>中断，异常和陷阱的区别和联系</title>
+        <tgroup cols="6">
+            <colspec colnum="1" colname="col1" colwidth="1*" />
+            <colspec colnum="2" colname="col2" colwidth="1*" />
+            <colspec colnum="3" colname="col3" colwidth="1*" />
+            <colspec colnum="4" colname="col4" colwidth="2*" />
+            <colspec colnum="5" colname="col5" colwidth="2*" />
+            <colspec colnum="6" colname="col6" colwidth="4*" />
+            
+            <thead>
+                <row><entry></entry><entry>对CPU来说是</entry><entry namest="col3" nameend="col4" align="center">和当前CPU所执行的指令的关系</entry><entry>CPU接下来的事情</entry><entry>程序员和用户的态度</entry></row>
+            </thead>
+            
+            <tbody>
+                <row><entry>中断</entry><entry>被动的</entry><entry>异步的</entry><entry>没关系</entry><entry>跳转到对应的ISR</entry><entry>希望有对应的中断，以使得CPU可以响应对应的中断，执行对应的ISR</entry></row>
+                <row><entry>异常</entry><entry>被动的</entry><entry>同步的</entry><entry>有关系，因为就是当前指令执行出问题，才有的异常</entry><entry>跳转到对应的异常处理</entry><entry>不希望出现异常，如果出现了，那往往是指令执行出现某些错误了</entry></row>
+                <row><entry>陷阱</entry><entry>主动的</entry><entry>同步的</entry><entry>有关系，就是执行当前软中断指令，才进入的软中断</entry><entry>执行对应的软中断处理函数</entry><entry>对于想要实现调试功能的程序员，有需要此陷阱的必要，其他人不用关心此点</entry></row>
+            </tbody>
+        </tgroup>
+    </table>
+    <para>下面，用图表总结了，中断，陷阱和异常的区别：</para>
+    <figure xml:id="fg.int_expt_trap_relation"><title>中断，陷阱和异常的区别</title>
+        <mediaobject>
+            <imageobject role="html"><imagedata fileref="images/interrput_trap_exception.png" align="left"   scalefit="0" width="100%" /></imageobject>
+            <imageobject role="fo">  <imagedata fileref="images/interrput_trap_exception.png" align="center" scalefit="1" width="100%"/></imageobject>
+        </mediaobject>
+    </figure>
+    <note>
+        <para>无论是中断，还是异常和陷阱，对应的处理函数，一般都可以称其为中断服务程序ISR，都只是一个函数</para>
+        <para>具体函数里面要做什么事情，是由你写程序的人决定的</para>
+        <para>比如中断中处理对应的事情，异常中自己决定如何响应出现的异常，陷阱中决定做什么事情。</para>
+    </note>
+</sect1>
+
+</chapter>

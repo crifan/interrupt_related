@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE book
+[
+
+<!ENTITY cur_book_name      "hardware_basic" >
+<!ENTITY publish_date       "2012-08-14" >
+<!ENTITY release_version    "1.1" >
+
+<!ENTITY copyrith_year "2012" >
+<!ENTITY entity_common_multi_format     SYSTEM  "../../entity_common_multi_format.xml">
+<!ENTITY entity_common_publish_info     SYSTEM  "../../entity_common_publish_info.xml">
+]>
+
+<book version="5.0"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    xml:lang="zh_CN"
+    >
+
+<info>
+    <title>【详解】中断相关的知识</title>
+    <subtitle></subtitle>
+    <keywordset>
+        <keyword>中断</keyword>
+        <keyword>异常</keyword>
+        <keyword>陷阱</keyword>
+        <keyword>向量中断</keyword>
+        <keyword>非向量中断</keyword>
+    </keywordset>
+
+    <abstract>
+        <para>此文详细介绍了中断，陷阱和异常之间的区别和联系。以及中断的各种分类，包括向量中断和非向量中断，内部中断和外部中断，软件中断和硬件中断可屏蔽中断和非可屏蔽中断，并且对向量中断和非向量中断进行了实例解析</para>
+        &entity_common_multi_format;
+    </abstract>
+
+    <revhistory>
+        <revision>
+            <revnumber>1.0</revnumber>
+            <date>2011-11-01</date>
+            <revremark>
+                <orderedlist>
+                    <listitem>详细解释了中断，陷阱和异常之间的区别和联系</listitem>
+                    <listitem>详细解释了中断的各种分类</listitem>
+                </orderedlist>
+            </revremark>
+            <authorinitials>crl</authorinitials>
+        </revision>
+        <revision>
+            <revnumber>&release_version;</revnumber>
+            <date>&publish_date;</date>
+            <revremark>
+                <orderedlist>
+                    <listitem>通过Docbook发布</listitem>
+                </orderedlist>
+            </revremark>
+            <authorinitials>crl</authorinitials>
+        </revision>
+    </revhistory>
+
+    &entity_common_publish_info;
+</info>
+
+<xi:include href="glossary.xml"/>
+<xi:include href="preface.xml"/>
+<xi:include href="ch01_whatis_interrupt.xml"/>
+<xi:include href="ch02_interrupt_trap_exception.xml"/>
+<xi:include href="ch03_interrput_type.xml"/>
+<xi:include href="reference.xml"/>
+
+</book>

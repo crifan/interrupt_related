@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="whatis_interrupt">
+<title>什么是中断</title>
+<abstract></abstract>
+
+<sect1 xml:id="before_interrupt"><title>中断出现之前</title>
+    <para>在中断出现之前，程序的执行，都是CPU一步步按照指令顺序执行下去的，中间即使有程序的跳转，但是CPU的执行的顺序，还是由程序中的代码的逻辑决定的。</para>
+    <para>首先要了解的背景知识是，CPU指令的执行速度和外设IO之间，前者很多都是纳秒（nm）级别的，后者很多都是毫秒（ms）级别的，所以时间量级上相差很大。</para>
+    <para>有了这个背景知识后，再去了解程序实际执行过程中，有时候会涉及到CPU要去和各种外设打交道。</para>
+    <para>比如，CPU发送完毕一个指令后，外设IO开始执行对应的动作，然后CPU就开始去读取对应的外设的状态，由于CPU指令执行很快，然后结果就是CPU执行了N次指令了，结果查询到的结果是，外设还没有执行完对应的动作。</para>
+    <para>最后的最后，好不容易等到外设执行外对应的动作了，然后才接着执行后面的指令。</para>
+    <para>此循环地，不断地去等待外设完成对应的动作，叫做轮询（Poll）。</para>
+    <para>可以发现，CPU在轮询过程中，就是在做无用功，而为了提高CPU的效率，不要让其浪费生命在无谓的轮询上，所以才会引出中断这个概念。</para>
+</sect1>
+
+<sect1 xml:id="why_need_interrupt"><title>为何要有中断</title>
+    <para>所谓的中断的方式，就是当CPU发送完指令，让外设开始去执行其对应的动作之后，不再像之前一样傻傻等待，不断地轮询，而是发送完指令后，让外设去干其该干的活，然后自己就返回了，继续执行其他的指令了，然后等过了会，外设干完活了，硬件上，会自动发送一个中断给CPU，通知其说，我活已经干完了，你可以过来处理后续该要处理的事情了，比如将对应的数据拷贝到对应的其他内容中等等之类的事情。</para>
+    <para>这套机制，就是对应的中断的概念，简要描述就是：</para>
+    <para>CPU对外设等设备做好对应的准备工作后，然后就继续执行其他CPU指令了，然后外设做完自己的事情之后，硬件上，会自动发送对应的中断给CPU的，而CPU发现有中断了，然后才会跳转到对应的中断服务程序，即常说的ISR（Interrupt Service Routine），做接下来的事情，比如将数据拷贝到对应的内容中等等。</para>
+    <para>关于中断的概念方面，此处不再赘述，因为这里有更加清晰易懂的解释：</para>
+    <para><link xl:href="http://www.crifan.com/switch_arm9_2410_transplant_arm_interrupt_principle_the_error_interrupt_nesting_how_come_the_interrupt_number/">【转】ARM9 2410移植之ARM中断原理, 中断嵌套的误区，中断号的怎么来的</link></para>
+</sect1>
+
+</chapter>
